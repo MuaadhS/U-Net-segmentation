@@ -1,15 +1,8 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Mar 21 12:19:02 2022
 
-@author: moaat
-"""
-
-# -*- coding: utf-8 -*-
 """
 Created on Mon Mar 21 11:37:14 2022
 
-@author: moaat
+@author: moaadh
 """
 
 
