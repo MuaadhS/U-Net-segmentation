@@ -89,7 +89,7 @@ input_layer_ir = next(iter(exec_net.input_info))
 
 
 # Configure the input 
-image = cv2.imread(r"CLAHE_Image_screenshot_24.03.2022.png", 0)
+image = cv2.imread(r"4X_35_T001.jpg", 0)
 #image = cv2.imread(r"image__1_03.png", 0)
 N, C, H, W = net.input_info[input_layer_ir].tensor_desc.dims
 
@@ -167,9 +167,9 @@ segmentation_mask=(result_ir[0,0,:,:] > 0.5).astype(np.uint8)
 
 
 # Define colormap, each color represents a class
-colormap = np.array([[68, 1, 84], [255, 216, 52]])#, [53, 183, 120], [199, 216, 52]])
+#colormap = np.array([[68, 1, 84], [255, 216, 52]])#, [53, 183, 120], [199, 216, 52]])
 #colormap = np.array([[0, 0, 0], [255, 255, 255]])  68, 1, 84 purple ,  48, 103, 141 skyblue , 53, 183, 120 green, 199, 216, 52 yellow
-
+colormap = np.array([[68, 1, 84], [255, 216, 52]])
 
 # Define the transparency of the segmentation mask on the photo
 alpha = 0.3
@@ -182,17 +182,18 @@ resized_mask = cv2.resize(mask, (image_w, image_h))
 image_with_mask = cv2.addWeighted(resized_mask, alpha, rgb_image, 1 - alpha, 0)
 
 numberPixels = len(cv2.findNonZero(segmentation_mask))
-print(numberPixels)
+#print(numberPixels)
 
 img_area = segmentation_mask.shape[0] * segmentation_mask.shape[1]
-segmented_cells = ((img_area - numberPixels)/ img_area) * 100
+segmented_cells = (1-((img_area - numberPixels)/ img_area)) * 100
 
-#print("The predected confluency is: ", segmented_cells, "%")
-conf=("The predected confluency is: ", segmented_cells, "%")
-print(conf)
+
+conf=("The estimated confluency is (%): ")
+
+print(conf + str(segmented_cells))
 #Show segmentation output
 
-
+cv2.imwrite('mask.png', image_with_mask)
 
 plt.figure(figsize=(15, 10))
 plt.subplot(231)
@@ -205,6 +206,8 @@ plt.subplot(233)
 plt.title('Image with mask')
 plt.imshow(image_with_mask)
 #plt.hist(segmentation_mask.flatten())
+
+#plt.savefig('myfilename.png', dpi=100)
 
 end = time.time()
 print(end - start)

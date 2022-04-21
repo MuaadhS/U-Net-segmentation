@@ -22,6 +22,27 @@ import logging
 logging.basicConfig(format='[ %(levelname)s ] %(message)s', level=logging.INFO)
 log = logging.getLogger()
 
+
+####
+from pushbullet import PushBullet
+
+API_KEY = "o.ZjGBEbhflDmjeLjFlz1lhTwNFSJUIFSN"
+
+def notify():
+    pb = PushBullet(API_KEY)
+
+#    conf=("The estimated confluency is: ")
+#    segmented_cells = 85
+    text = conf
+
+    push = pb.push_note('The sample is ready!', text)
+
+    with open("mask.png", "rb") as pic:
+        file_data = pb.upload_file(pic, "picture.png")
+
+    push = pb.push_file(**file_data)
+
+
 def build_argparser():    
     parser = ArgumentParser(add_help=False)
     args = parser.add_argument_group('Options')
@@ -225,6 +246,10 @@ resized_mask = cv2.resize(mask, (image_w, image_h))
 # Create image with mask put on
 image_with_mask = cv2.addWeighted(resized_mask, alpha, rgb_image, 1 - alpha, 0)
 
+#######
+
+cv2.imwrite('mask.png', image_with_mask)
+
 numberPixels = len(cv2.findNonZero(segmentation_mask))
 #print(numberPixels)
 
@@ -232,11 +257,15 @@ img_area = segmentation_mask.shape[0] * segmentation_mask.shape[1]
 segmented_cells = (1-((img_area - numberPixels)/ img_area)) * 100
 
 
-conf=("The estimated confluency is (%): ")
+conf_text=("The estimated confluency is (%): ")
 
-print(conf + str(segmented_cells))
-#log.info(conf)
+conf = conf_text + str(segmented_cells)
 
+print(conf)
+
+notify()
+
+#######
 
 #Show segmentation output 
 plt.figure(figsize=(15, 10))
@@ -251,7 +280,7 @@ plt.title('Image with mask')
 plt.imshow(image_with_mask)
 
 end = time.time()
-print(end - start)
+print("The elapsed time is (s): " + str(end - start))
 
 plt.show()
 #plt.savefig('myfilename.png', dpi=100)
