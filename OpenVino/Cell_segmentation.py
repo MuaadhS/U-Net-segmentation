@@ -31,8 +31,7 @@ API_KEY = "o.ZjGBEbhflDmjeLjFlz1lhTwNFSJUIFSN"
 def notify():
     pb = PushBullet(API_KEY)
 
-#    conf=("The estimated confluency is: ")
-#    segmented_cells = 85
+
     text = conf
 
     push = pb.push_note('The sample is ready!', text)
@@ -144,41 +143,6 @@ input_layer_ir = next(iter(exec_net.input_info))
 
 
 
-'''
-# Configure the input 
-#image = cv2.imread(args["input"], cv2.IMREAD_GRAYSCALE)
-image = cv2.imread(args.input, 0)
-#image = cv2.imread(r"image__3_00.tif", 0)
-#image = cv2.imread(r"d1-c1-002.jpg", 0)
-
-
-N, C, H, W = net.input_info[input_layer_ir].tensor_desc.dims
-
-#resized_image = cv2.resize(image, (512, 512))
-image = cv2.resize(image, (512, 512))
-image_h, image_w, = image.shape
-
-image_norm = np.expand_dims(normalize(np.array(image), axis=1),2)
-image_norm = image_norm[:,:,0][:,:,None]
-input_image = np.expand_dims(image_norm.transpose(2, 0, 1), 0)
-
-
-rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
-plt.imshow(image, cmap = 'gray')
-
-
-
-# Run the infernece
-result = exec_net.infer(inputs={input_layer_ir: input_image})
-result_ir = result[output_layer_ir]
- 
-# Prepare data for visualization
-segmentation_mask=(result_ir[0,0,:,:] > 0.5).astype(np.uint8)
-
-
-plt.imshow(segmentation_mask, cmap='viridis')
-'''
 # Configure the input 
 image = cv2.imread(args.input, 0)
 #image = cv2.imread(r"d1-c1-002.jpg", 0)
@@ -285,25 +249,7 @@ print("The elapsed time is (s): " + str(end - start))
 plt.show()
 #plt.savefig('myfilename.png', dpi=100)
 
-'''
-result_directory = args.
-plt.tight_layout()
-img_name_name = os.path.join(results_directory, "pred{}.png".format(img_no))
-plt.savefig(png_name, bbox_inches="tight", pad_inches=0)
-'''
 
-##############################################################
-
-'''
-#IOU
-y_pred = result_ir
-y_pred_thresholded = y_pred > 0.5
-
-intersection = np.logical_and(segmentation_mask, y_pred_thresholded)
-union = np.logical_or(segmentation_mask, y_pred_thresholded)
-iou_score = np.sum(intersection) / np.sum(union)
-print("IoU socre is: ", iou_score)
-'''
 
 
 cv2.waitKey(0)
